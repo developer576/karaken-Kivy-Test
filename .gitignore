@@ -1,0 +1,9 @@
+.buildozer/*
+bin/*
+dist/*
+build/*
+version.txt
+java/com/github/hbldh/bleak/PythonScanCallback.java:Zone.Identifier
+java/com/github/hbldh/bleak/PythonBluetoothGattCallback.java:Zone.Identifier
+LocalAndroidBuild/*
+Data/*

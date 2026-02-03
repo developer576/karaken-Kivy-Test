@@ -1,0 +1,46 @@
+# Build Kraken Tester Android APK on GitHub (no Ubuntu/WSL needed on your PC).
+# Push this file to your repo, then go to Actions → run the workflow → download APK from Artifacts.
+
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:   # allows "Run workflow" from Actions tab
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip python3-venv build-essential zip \
+            libffi-dev libssl-dev autoconf automake libtool pkg-config \
+            zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake \
+            libxml2-dev libxslt1-dev libreadline-dev libsqlite3-dev wget \
+            libgdbm-dev libc6-dev openjdk-17-jdk unzip
+
+      - name: Install Buildozer and Cython
+        run: pip install buildozer Cython
+
+      - name: Build APK
+        run: buildozer -v android debug --allow-external --allow-downgrade
+        env:
+          # Avoid interactive prompts
+          P4A_RELEASE_KEYSTORE: ""
+          P4A_RELEASE_KEYALIAS: ""
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: bin/*.apk
