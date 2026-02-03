@@ -31,7 +31,8 @@ jobs:
             libgdbm-dev libc6-dev openjdk-17-jdk unzip
 
       - name: Install Buildozer and Cython
-        run: pip install buildozer Cython
+        # Pin Cython so pyjnius builds (jnius_utils.pxi uses Python 2 'long'; Cython 0.29.x handles it)
+        run: pip install buildozer "Cython==0.29.33"
 
       - name: Build APK
         run: buildozer -v android debug --allow-external --allow-downgrade
