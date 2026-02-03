@@ -10,7 +10,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # Use 22.04: python-for-android's libffi build fails on 24.04 (LT_SYS_SYMBOL_USCORE / autotools incompatibility)
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
